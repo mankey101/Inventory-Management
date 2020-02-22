@@ -9,4 +9,5 @@ urlpatterns = [
 	 name='book_screen'),
 	path('deleteAll', views.clearAllBookings, name='clrAllBookings'),
 	path('book/all', views.allBookings, name="allBookings"),
+	path('book/cancel/<int:booking_id>', views.cancelBooking, name="cancelBooking")
 ]

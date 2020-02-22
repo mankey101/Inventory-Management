@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class RoomResource(models.Model):
-	s_no = models.CharField('Ref No.',max_length = 10)
+	s_no = models.CharField('Ref No.',max_length = 50)
 	# name
 	desc = models.CharField(max_length = 100)
 	#location
@@ -19,6 +19,7 @@ class RoomBooking(models.Model):
 	start_time = models.DateTimeField('Start of booking', null=False)
 	end_time = models.DateTimeField('End of Booking', null = False)
 	roll_no = models.CharField(max_length = 20, default = 'Admin')
+	active = models.BooleanField(default=True)
 
 	def __str__(self):
 		return (self.room.desc + ', by: ' 

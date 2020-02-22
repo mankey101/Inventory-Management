@@ -1,11 +1,12 @@
 # https://docs.djangoproject.com/en/3.0/topics/db/queries/
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from django.template import loader
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from datetime import datetime, timedelta, tzinfo
+from django.urls import reverse
 
 from .models import RoomResource, RoomBooking
 
@@ -57,7 +58,8 @@ def bookScreen(request, room_id):
 				# room_id === foreign-key.id
 				querySet = RoomBooking.objects.filter(room_id = room.id).filter(
 						end_time__gte=thisbook.start_time,
-						start_time__lte=thisbook.end_time
+						start_time__lte=thisbook.end_time,
+						active__exact=True,
 					)
 
 				if querySet.count()==0:
@@ -75,7 +77,7 @@ def clearAllBookings(request):
 	return HttpResponse('Deleted all. ')
 
 def allBookings(request):
-	all_rooms_list = RoomBooking.objects.order_by('start_time')
+	all_rooms_list = RoomBooking.objects.filter(active__exact=True).order_by('-start_time')
 
 	context = {
 		'all_rooms_list': all_rooms_list,
@@ -83,3 +85,12 @@ def allBookings(request):
 	}
 
 	return render(request, 'polls/allBookings.html', context)
+
+def cancelBooking(request, booking_id):
+	booking = get_object_or_404(RoomBooking, id=booking_id)
+	
+	if (request.user.is_authenticated and request.user.email == booking.roll_no):
+		booking.active=False
+		booking.save()
+
+	return HttpResponseRedirect(reverse('polls:allBookings'))

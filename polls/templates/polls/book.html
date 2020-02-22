@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-	<h1> {{room}} {{user.useremail}} </h1>
+	<h1> Booking: {{room}}  </h1>
  
 	<div>
 		<form action="{% url 'polls:book_screen' room.id %}" method="post">
 			{% csrf_token %}
 
-			<label> Roll No. </label> <br>
-			<input type="text" name="rno">
-			<br><br>
-			<label> Booking Start Time 
+			<label> Your email: </label>
+			<label> {{user.email}} </label>
+			<br>
+			<input type="hidden" value="{{user.email}}" name="rno" />
+			<label> Please enter Booking Start Time 
 			in this format 'YYYY-MM-DD HH:MM'
 			</label><br>
 			<input type="text" name="start_tm">
