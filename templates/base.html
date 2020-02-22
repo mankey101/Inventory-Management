@@ -38,16 +38,24 @@
             {% block breadcrumb %}
             {% endblock %}
         </ol>
+            {% if user.is_authenticated %}
+            <h2>Welcome {{user.username}} </h2>
+            {%endif%}
+            <hr>
 
+        {% if user.is_authenticated %}
         {% block content %}
         
         
         {% endblock %}
+        {% else %}
+
+        <p> Please login! </p>
+
+        {% endif %}
     </div>
     {% endblock body %}
-    {% if user.is_authenticated %}
-    <h2>Welcome {{user.username}} </h2>
-    {%endif%}
+
 </body>
 
 </html>

@@ -8,4 +8,5 @@ urlpatterns = [
 	path('book/<int:room_id>', views.bookScreen,
 	 name='book_screen'),
 	path('deleteAll', views.clearAllBookings, name='clrAllBookings'),
+	path('book/all', views.allBookings, name="allBookings"),
 ]

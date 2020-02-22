@@ -24,3 +24,6 @@ class RoomBooking(models.Model):
 		return (self.room.desc + ', by: ' 
 			+ self.roll_no + ' @ ' + self.start_time.strftime("%s %s" % ("%Y-%m-%d", "%H:%M"))
 			+ ', till: ' + self.end_time.strftime("%s %s" % ("%Y-%m-%d", "%H:%M")))
+
+	def getDesc(self):
+		return self.room.desc

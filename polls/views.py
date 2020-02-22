@@ -73,4 +73,13 @@ def bookScreen(request, room_id):
 def clearAllBookings(request):
 	RoomBooking.objects.all().delete()
 	return HttpResponse('Deleted all. ')
-	
+
+def allBookings(request):
+	all_rooms_list = RoomBooking.objects.order_by('start_time')
+
+	context = {
+		'all_rooms_list': all_rooms_list,
+		'head_title': 'Rooms Bookings'
+	}
+
+	return render(request, 'polls/allBookings.html', context)

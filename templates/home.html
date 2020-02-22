@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+	<h1> {{room}} </h1>
+
+	<div>
+		<ul> 
+			<li> <a href="{% url 'polls:poll_index' %}"> Book Rooms</a> </li>
+		</ul>
+	</div>
+
+
+{% endblock %}
