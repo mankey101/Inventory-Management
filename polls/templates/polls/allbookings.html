@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+	<h1> All bookings  </h1>
+ 
+	<div>
+			{% for room in all_rooms_list %}
+			<li> 
+				<strong>Room: {{ room.getDesc }} </strong>, Booked from: {{room.start_time}}, till: {{room.end_time}}, by : {{room.roll_no}} 
+				{% if user.email == room.roll_no %}
+					<a href="{% url 'polls:cancelBooking' room.id %}"> <strong> Cancel Booking  </strong></a>
+				{% endif %}
+			</li>
+			{% endfor %}
+	</div>
+
+	<br>
+	<div>
+		{% if errormsg %} <p> <strong> Error: {{errormsg}} </strong> </p>
+		{% endif %}
+
+		{% if booking_info %}
+		Booking Done!
+		{{booking_info}}
+
+		{% endif %}
+	</div>
+{% endblock %}

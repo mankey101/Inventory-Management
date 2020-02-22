@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> 
+	{% if head_title %} {{head_title}}
+	{% else %} No Title :3
+	{% endif %}
+	</title>
+</head>
+
+<body>
+	<header>
+		<div style="background-color: rgba(150,150,100,0.5);">
+			<p> Welcome! </p>
+		</div>
+		<hr />
+	</header>
+	{% block content %}{% endblock %}
+</body>
+
+</html>
