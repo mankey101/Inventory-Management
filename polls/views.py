@@ -1,10 +1,13 @@
+# https://docs.djangoproject.com/en/3.0/topics/db/queries/
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 from django.template import loader
 from django.shortcuts import render
+from django.utils.dateparse import parse_datetime
+from datetime import datetime, timedelta, tzinfo
 
-from .models import RoomResource
+from .models import RoomResource, RoomBooking
 
 # Create your views here.
 def index(request):
@@ -21,6 +24,53 @@ def index(request):
 # need a room as context. 
 def bookScreen(request, room_id):
 	room = get_object_or_404(RoomResource, id=room_id)
+	errormsg = None
+	try:
+		req_rno = request.POST['rno']
+		req_stt = request.POST['start_tm']
+	# see if post values are there. If not, render 
+	# basic page
+	except:
+		req_rno = None
+		return render(request, 'polls/book.html', 
+		{'room':room, 'head_title':'Room Book'})
+	else:
+		try:
+			begin = parse_datetime(req_stt)
+		except:
+			errormsg = "Enter Valid DateTime!"	
+			return render(request, 'polls/book.html', 
+			{'room':room, 'head_title':'Room Book', 
+			'errormsg': errormsg})
+		else:
+			if(begin is None):
+				errormsg = "Enter Valid DateTime!"	
+				return render(request, 'polls/book.html', 
+				{'room':room, 'head_title':'Room Book', 
+				 'errormsg': errormsg})			
+			else:
+				end = begin + timedelta(minutes=59)
+				thisbook = RoomBooking(room=room, start_time=begin, end_time=end, roll_no=req_rno)
+				# thisbook.save()
+				# Do it later after some checks
+				
+				# room_id === foreign-key.id
+				querySet = RoomBooking.objects.filter(room_id = room.id).filter(
+						end_time__gte=thisbook.start_time,
+						start_time__lte=thisbook.end_time
+					)
 
-	return render(request, 'polls/book.html', 
-		{'room':room})
+				if querySet.count()==0:
+					thisbook.save()
+					return render(request, 'polls/book.html', 
+					{'room':room, 'head_title':'Room Book', 
+					'booking_info': thisbook})
+				else:
+					return render(request, 'polls/book.html', 
+					{'room':room, 'head_title':'Room Book', 
+				 	'errormsg': 'This slot is already booked!'})	
+
+def clearAllBookings(request):
+	RoomBooking.objects.all().delete()
+	return HttpResponse('Deleted all. ')
+	
