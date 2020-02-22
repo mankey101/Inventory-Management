@@ -77,7 +77,7 @@ def clearAllBookings(request):
 	return HttpResponse('Deleted all. ')
 
 def allBookings(request):
-	all_rooms_list = RoomBooking.objects.filter(active__exact=True).order_by('-start_time')
+	all_rooms_list = RoomBooking.objects.filter(active__exact=True, end_time__gte=datetime.now()).order_by('-start_time')
 
 	context = {
 		'all_rooms_list': all_rooms_list,
