@@ -22,7 +22,7 @@ ret.short_description = "Mark selected items as returned"
 
 class EquipmentAdmin(admin.ModelAdmin):
     list_display = ['index', 'equip_type','actual_equipment', 'status', 'issued_to', 'lastIssued']
-    list_filter = ['equip_type']
+    list_filter = ['equip_type', 'status']
     actions = [issue, ret]
 
 
